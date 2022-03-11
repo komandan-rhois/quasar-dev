@@ -49,89 +49,29 @@
         <div class="col-xs-12 col-md-6 q-gutter-md">
           <div class="q-pa-md" style="max-width: 350px">
             <q-list>
-              <q-item>
-                <q-item-section>
-                  <q-item-label v-model="user.email"></q-item-label>
-                  <q-item-label caption lines="2"
-                    >Secondary line text. Lorem ipsum dolor sit amet,
-                    consectetur adipiscit elit.</q-item-label
-                  >
-                </q-item-section>
+              <div v-for="detail in userPosts" :key="detail">
+                <q-item>
+                  <q-item-section>
+                    <q-item-label> {{ detail.title }}</q-item-label>
+                    <q-item-label caption>
+                      {{ detail.body }}
+                    </q-item-label>
+                  </q-item-section>
 
-                <q-item-section side top>
-                  <q-item-label caption>5 min ago</q-item-label>
-                  <q-icon name="star" color="yellow" />
-                </q-item-section>
-              </q-item>
+                  <q-item-section side top>
+                    <q-item-label caption>
+                      2 min ago
+                    </q-item-label>
+                    <div class="text-orange">
+                      <q-icon name="star" />
+                      <q-icon name="star" />
+                      <q-icon name="star" />
+                    </div>
+                  </q-item-section>
+                </q-item>
 
-              <q-separator spaced inset />
-
-              <q-item>
-                <q-item-section>
-                  <q-item-label>Single line item</q-item-label>
-                  <q-item-label caption
-                    >Secondary line text. Lorem ipsum dolor sit amet,
-                    consectetur adipiscit elit.</q-item-label
-                  >
-                </q-item-section>
-
-                <q-item-section side top>
-                  <q-item-label caption>Voted!</q-item-label>
-                </q-item-section>
-              </q-item>
-
-              <q-separator spaced inset />
-
-              <q-item>
-                <q-item-section>
-                  <q-item-label>Single line item</q-item-label>
-                  <q-item-label caption
-                    >Secondary line text. Lorem ipsum dolor sit amet,
-                    consectetur adipiscit elit.</q-item-label
-                  >
-                </q-item-section>
-
-                <q-item-section side top>
-                  <q-badge color="teal" label="10k" />
-                </q-item-section>
-              </q-item>
-
-              <q-separator spaced inset />
-
-              <q-item>
-                <q-item-section>
-                  <q-item-label>Single line item</q-item-label>
-                  <q-item-label caption
-                    >Secondary line text. Lorem ipsum dolor sit amet,
-                    consectetur adipiscit elit.</q-item-label
-                  >
-                </q-item-section>
-
-                <q-item-section side top>
-                  <q-item-label caption>2 min ago</q-item-label>
-                  <div class="text-orange">
-                    <q-icon name="star" />
-                    <q-icon name="star" />
-                    <q-icon name="star" />
-                  </div>
-                </q-item-section>
-              </q-item>
-
-              <q-separator spaced inset />
-
-              <q-item>
-                <q-item-section>
-                  <q-item-label>Single line item</q-item-label>
-                  <q-item-label caption
-                    >Secondary line text. Lorem ipsum dolor sit amet,
-                    consectetur adipiscit elit.</q-item-label
-                  >
-                </q-item-section>
-
-                <q-item-section side top>
-                  <q-item-label caption>meta</q-item-label>
-                </q-item-section>
-              </q-item>
+                <q-separator spaced inset />
+              </div>
             </q-list>
           </div>
         </div>
@@ -160,35 +100,36 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
-import { UserInterface } from 'src/interface/UserInt';
-import { PostInterface } from 'src/interface/PostInt';
-import useUsersService from 'src/hooks/useUsersService';
-import useCatchError from 'src/hooks/useCatchError';
-import useUserRouterMethods from 'src/hooks/useUserRouterMethods';
-import useSuccessNotify from 'src/hooks/useSuccessNotify';
+import { defineComponent, onBeforeMount, ref, computed } from "vue";
+import { useRoute } from "vue-router";
+import { UserInterface } from "src/interface/UserInt";
+import { PostInterface } from "src/interface/PostInt";
+import useUsersService from "src/hooks/useUsersService";
+import useCatchError from "src/hooks/useCatchError";
+import useUserRouterMethods from "src/hooks/useUserRouterMethods";
+import useSuccessNotify from "src/hooks/useSuccessNotify";
 
 const baseState = (): UserInterface => ({
   id: 0,
-  email: '',
-  name: '',
-  gender: '',
-  status: '',
+  email: "",
+  name: "",
+  gender: "",
+  status: ""
 });
 const basePost = (): PostInterface => ({
-  title: '',
-  body: '',
+  id: 0,
+  title: "",
+  body: ""
 });
 export default defineComponent({
-  name: 'UserForm',
+  name: "UserForm",
   setup() {
     const $route = useRoute();
     const {
       getUserById,
       createUser,
       updateUser,
-      getUserPosts,
+      getUserPosts
     } = useUsersService();
     const { errorNotify } = useCatchError();
     const { successNotify } = useSuccessNotify();
@@ -197,7 +138,7 @@ export default defineComponent({
     const routeIs = computed(() => ({
       create: !!$route.meta.create,
       update: !!$route.meta.update,
-      view: !!$route.meta.view,
+      view: !!$route.meta.view
     }));
 
     const userId = $route.params.id as string;
@@ -206,8 +147,8 @@ export default defineComponent({
 
     const getPageTitle = computed(() => {
       if (routeIs.value.view) return user.value.name;
-      if (routeIs.value.update) return 'Update User';
-      return 'Create User';
+      if (routeIs.value.update) return "Update User";
+      return "Create User";
     });
 
     const getUserData = async () => {
@@ -262,6 +203,7 @@ export default defineComponent({
     };
 
     return {
+      userPosts,
       user,
       routeIs,
       getPageTitle,
