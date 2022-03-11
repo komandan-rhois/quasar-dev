@@ -211,7 +211,7 @@ export default defineComponent({
     };
 
     const getPostData = async () => {
-      userPosts.value = await getUserPosts(userId);
+      // userPosts.value = await getUserPosts(userId);
     };
 
     const resetState = async () => {
