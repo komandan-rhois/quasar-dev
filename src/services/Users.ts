@@ -1,5 +1,7 @@
-import { User } from 'src/services/models';
-import axios, { AxiosInstance } from 'axios';
+import { UserInterface } from 'src/interface/UserInt';
+import { PostInterface } from 'src/interface/PostInt';
+
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 const baseConfig = { baseURL: 'https://gorest.co.in/public/v2' };
 
@@ -10,32 +12,34 @@ export class Users {
     this.repository = httpRepository;
   }
 
-  async getAll(): Promise<User[]> {
-    const { data } = await this.repository.get<User[]>('users');
+  async getAll(): Promise<UserInterface[]> {
+    const { data } = await this.repository.get<UserInterface[]>('users');
 
     return data;
   }
 
-  async get(id: string): Promise<User> {
-    const { data } = await this.repository.get<User>(`users/${id}`);
+  async get(id: string): Promise<UserInterface> {
+    const { data } = await this.repository.get<UserInterface>(`users/${id}`);
 
     return data;
   }
 
-  async create(user: User): Promise<User> {
+  async create(user: UserInterface): Promise<UserInterface> {
     const headers = { Authorization: 'Bearer 9690fb8196780608aa119e9cadbf3901b8d6679995f2667a259a1f07fb7617cd' };
-    const { data } = await this.repository.post<User>('users', {
+    const { data } = await this.repository.post<UserInterface>('users', {
       user, headers,
     });
 
     return data;
   }
 
-  async update(id: string, user: User): Promise<User> {
-    const headers = { Authorization: 'Bearer 9690fb8196780608aa119e9cadbf3901b8d6679995f2667a259a1f07fb7617cd' };
-    const { data } = await this.repository.put<User>(`users/${id}`, {
-      user, headers,
-    });
+  async update(id: string, user: UserInterface): Promise<UserInterface> {
+    // eslint-disable-next-line max-len
+    const hdr = { Authorization: 'Bearer 9690fb8196780608aa119e9cadbf3901b8d6679995f2667a259a1f07fb7617cd' };
+    const config: AxiosRequestConfig = {
+      headers: hdr,
+    };
+    const { data } = await this.repository.patch<UserInterface>(`users/${id}`, user, config);
     return data;
   }
 
@@ -44,11 +48,12 @@ export class Users {
     return data;
   }
 
-  async getPost(id: string): Promise<User> {
-    const headers = { Authorization: 'Bearer 9690fb8196780608aa119e9cadbf3901b8d6679995f2667a259a1f07fb7617cd' };
-    const { data } = await this.repository.get<User>(`users/${id}/posts`, {
-      headers,
-    });
+  async getPost(id: string): Promise<PostInterface> {
+    const hdr = { Authorization: 'Bearer 9690fb8196780608aa119e9cadbf3901b8d6679995f2667a259a1f07fb7617cd' };
+    const config: AxiosRequestConfig = {
+      headers: hdr,
+    };
+    const { data } = await this.repository.get<PostInterface>(`users/${id}/posts`, config);
     return data;
   }
 }

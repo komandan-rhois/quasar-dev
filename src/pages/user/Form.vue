@@ -160,24 +160,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, ref, computed } from "vue";
-import { useRoute } from "vue-router";
-import { User, UserPost } from "src/services/models";
-import useUsersService from "src/hooks/useUsersService";
-import useCatchError from "src/hooks/useCatchError";
-import useUserRouterMethods from "src/hooks/useUserRouterMethods";
-import useSuccessNotify from "src/hooks/useSuccessNotify";
+import { defineComponent, onBeforeMount, ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { UserInterface } from 'src/interface/UserInt';
+import { PostInterface } from 'src/interface/PostInt';
+import useUsersService from 'src/hooks/useUsersService';
+import useCatchError from 'src/hooks/useCatchError';
+import useUserRouterMethods from 'src/hooks/useUserRouterMethods';
+import useSuccessNotify from 'src/hooks/useSuccessNotify';
 
-const baseState = (): User => ({
+const baseState = (): UserInterface => ({
   id: 0,
-  email: "",
-  name: "",
-  gender: "",
-  status: ""
+  email: '',
+  name: '',
+  gender: '',
+  status: '',
 });
-
+const basePost = (): PostInterface => ({
+  title: '',
+  body: '',
+});
 export default defineComponent({
-  name: "UserForm",
+  name: 'UserForm',
   setup() {
     const $route = useRoute();
     const {
@@ -193,17 +197,17 @@ export default defineComponent({
     const routeIs = computed(() => ({
       create: !!$route.meta.create,
       update: !!$route.meta.update,
-      view: !!$route.meta.view
+      view: !!$route.meta.view,
     }));
 
     const userId = $route.params.id as string;
-    const user = ref<User>(baseState());
-    const userPosts = ref<UserPost[]>([]);
+    const user = ref<UserInterface>(baseState());
+    const userPosts = ref<PostInterface>(basePost());
 
     const getPageTitle = computed(() => {
       if (routeIs.value.view) return user.value.name;
-      if (routeIs.value.update) return "Update User";
-      return "Create User";
+      if (routeIs.value.update) return 'Update User';
+      return 'Create User';
     });
 
     const getUserData = async () => {
@@ -211,7 +215,7 @@ export default defineComponent({
     };
 
     const getPostData = async () => {
-      // userPosts.value = await getUserPosts(userId);
+      userPosts.value = await getUserPosts(userId);
     };
 
     const resetState = async () => {
