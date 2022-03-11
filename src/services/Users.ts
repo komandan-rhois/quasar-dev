@@ -33,12 +33,22 @@ export class Users {
 
   async update(id: string, user: User): Promise<User> {
     const headers = { Authorization: 'Bearer 9690fb8196780608aa119e9cadbf3901b8d6679995f2667a259a1f07fb7617cd' };
-    const { data } = await this.repository.patch<User>(`users/${id}`, { user, headers });
+    const { data } = await this.repository.put<User>(`users/${id}`, {
+      user, headers,
+    });
     return data;
   }
 
   async delete(id: string): Promise<Record<string, unknown>> {
     const { data } = await this.repository.delete<Record<string, unknown>>(`users/${id}`);
+    return data;
+  }
+
+  async getPost(id: string): Promise<User> {
+    const headers = { Authorization: 'Bearer 9690fb8196780608aa119e9cadbf3901b8d6679995f2667a259a1f07fb7617cd' };
+    const { data } = await this.repository.get<User>(`users/${id}/posts`, {
+      headers,
+    });
     return data;
   }
 }

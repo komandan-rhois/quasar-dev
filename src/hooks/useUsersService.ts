@@ -22,6 +22,8 @@ const createUser = async (user: User) => UserService.create(user);
 
 const updateUser = async (id:string, user: User) => UserService.update(id, user);
 
+const getUserPosts = async (id: string) => UserService.getPost(id);
+
 export default () => ({
   users,
   deleteUser,
@@ -29,4 +31,5 @@ export default () => ({
   getAllUsers,
   createUser,
   updateUser,
+  getUserPosts,
 });

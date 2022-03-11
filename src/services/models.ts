@@ -5,3 +5,8 @@ export interface User {
   gender: string;
   status: string;
 }
+
+export interface UserPost {
+  title: string;
+  body: string;
+}
